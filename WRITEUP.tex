@@ -1,0 +1,132 @@
+\documentclass[12pt]{article}
+
+\usepackage[ptm]{mathptmx}
+\usepackage{setspace}
+\usepackage[export]{adjustbox}
+\usepackage[export]{adjustbox}
+\usepackage{fullpage}
+\usepackage[margin=1in]{geometry}
+\usepackage{csquotes}
+\usepackage{underscore}
+\usepackage{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{siunitx}
+
+\graphicspath{ {/home/cse13s/asgn1/} }
+\setstretch{1.5}
+\setlength\parindent{24pt}
+
+\begin{document}
+
+\flushright
+Nicolas Corfmat \\CSE13S, Winter 2023 \\ ncorfmat@ucsc.edu
+
+\flushleft
+\LARGE
+\textbf{\\Approximating Absolute Precision Using Series}
+\large
+\\\textit{Assignment 2: A Little Slice of $\pi$}
+
+\section{Description of Program}
+\normalsize
+This program approximates the values of \textit{e}, \textit{$\pi$}, and square roots using the user-defined functions e(), pi\textunderscore bbp(), pi\textunderscore madhava(), euler(), pi\textunderscore viete(), and sqrt\textunderscore newton(), and compares them to their counterparts found using math.h functions. These results are then printed and further represented in the generated graphs.
+
+\section{Estimating Euler's Number Using A Taylor Series}
+
+\normalsize
+Euler's number, as denoted by \textit{e}, is a mathematical constant whose digits never end or repeat. As a result, calculating its exact value would be a tedious (and do not forget infinite) task. However, with the help of the following Taylor Series, can we generate a value of \textit{e} precise enough to be compared with the one assigned in the C math.h library.
+
+\centering
+$
+\textit{e} = \sum^{\infty}_{k=0}{\dfrac{1}{k!}}
+$
+\flushleft
+
+Furthermore, after graphing the value of \textit{e} and the number of iterations it took to estimate that value, we get:
+
+\includegraphics[width=0.9\textwidth, center]{e_graph.pdf}
+
+As shown by the graph above, it only takes roughly 17 terms to approximate a value of \textit{e} that has a difference of $\num{2e-15}$ (not shown on graph). In fact, we immediately get a precise number within the first 4 to 5 iterations, proving how effective this method is for approximating the value of \textit{e}. Moreover, using this Taylor series is effective for requiring low computational power, easing the processes within your computer's CPU.
+
+\section{The Bailey-Borwein-Plouffe Formula}
+
+\normalsize
+Pi, as denoted by $\pi$, is also a mathematical constant whose digits continue infinitely. The given Bailey-Borwein-Plouffe Formula can be used to estimate the value of $\pi$ to a precision close enough to the one provided in C's math.h library.
+
+\centering
+$
+\textit{p(n)} = \sum^{n}_{k=0} $16^{-k}$ {\dfrac{(k(120k+151)+47)}{k(k(k(512k+1024)+712)+194)+15}}
+$
+\flushleft
+
+Graphing the value of \textit{$\pi$} and the number of iterations it took to estimate that value gets us:
+
+\includegraphics[width=0.9\textwidth, center]{bbp_graph.pdf}
+
+According to the produced graph, using this formula requires roughly 10 iterations to approximate a $\pi$ close enough to one in the included library (difference of $\num{2e-15}$). Since the series begins at around the value of $\pi$, all it takes is several more iterations to decrease the gap between its actual value (explaining the evident 'plateau' between iterations 2 and 10). Although it might appear as if the value of $\pi$ is unchanging within this period, it is in fact getting more precise, but at an increasingly smaller rate. The low iteration count of this method makes it simple enough for a computer to calculate it practically instantly.
+
+\vspace{4in}
+\section{The Madhava Series}
+\normalsize
+
+\centering
+$
+Formula: \hspace{0.25cm} \textit{p(n)} = \sqrt{12}\sum^{n}_{k=0}\dfrac{(-3)^{-k}}{2k+1}
+$
+
+\includegraphics[width=0.9\textwidth, center]{madhava_graph.pdf}
+\flushleft
+
+Observing the plot of the Madhava Series, this formula computes roughly 27 terms before it yields a value of $\pi$ that is $\num{7e-15}$ off from the library's $\pi$ value. In this approach, we add then subtract increasingly smaller fractions as we get closer to $\pi$ and within the first 4 iterations, our fractions becomes so small that it is hard to notice any changes happening to the approximated value of $\pi$. While there exist differences between the efficiency of the Madhava Series and the Bailey-Borwein-Plouffe approach, they are so extremely minute in the greater picture that it would be equally fine to utilize these functions to generate precise values of $\pi$.
+
+\vspace{2in}
+\section{Euler's Solution}
+\normalsize
+
+\centering
+$
+Formula: \hspace{0.25cm} \textit{p(n)} = \sqrt{6\sum^{n}_{k=1}\dfrac{1}{k^{2}}}
+$
+\flushleft
+
+\includegraphics[width=0.9\textwidth, center]{euler_graph.pdf}
+
+I want to take the time to commemorate all computers that approximate $\pi$ using this solution because, wow! According to the graph, it takes roughly 10 million loops to yield a value of $\pi$ that is roughly $\num{9.55e-8}$ off from the library's $\pi$ value. Absorbing that information, can we immediately discern that this method is not only less precise than the previous two mentioned, it is also unimaginably less efficient at calculating it. The plateau observed on the graph represents the values of $k^{2}$ that get exponentially smaller as the term count increases. In order to store such a large integer, I had to use the \textit{long} variable type, making it possible to calculate the formula's denominator. Ultimately, I would categorize Euler's Solution as an \enquote{avoid when possible,} as a result of its intensive cost on your computer's CPU. In my case, calculating all 10 million data points would have been taxing for my computer, leading me to record every thousandth point after the 1000th iteration. 
+
+\vspace{1in}
+\section{Vi{\`e}te's Formula}
+\normalsize
+
+Formula:
+\centering
+$
+\dfrac{2}{\pi} = \Pi^{\infty}_{k=0}\dfrac{a_i}{2} \hspace{0.25cm} , where \hspace{0.25cm} a_1 = \sqrt{2} \hspace{0.25cm} and \hspace{0.25cm} a_k = \sqrt{2+{a_{k-1}}} \hspace{0.25cm} for \hspace{0.25cm} all \hspace{0.25cm} k > 1.
+$
+
+\includegraphics[width=0.9\textwidth, center]{viete_graph.pdf}
+\flushleft
+
+Much like the Bailey-Borwein-Plouffe and Madhava Series, Vi{\`e}te's Formula requires minimal computational power to precisely approximate a $\pi$ close enough to the given library's $\pi$ (difference of $\num{1.8e-14}$). Similarly, it reaches a close level of precision within the first 5 iterations, making this method both efficient and near-perfect if one were to ever need to estimate the value of $\pi$.
+
+\section{Newton's Method For Approximating Square Roots}
+\normalsize
+
+\includegraphics[width=0.9\textwidth, center]{newton_graph.pdf}
+
+The graph above compares the square root values calculated using the built-in math.h function and our version, which is an implementation of Newton's Method. Firstly, it becomes visibly apparent that this relationship is linear, yet not completely. We could draw a precise linear regression but never a line that goes through each point, given that there are differences between the math.h and newton square root values. Moreover, between 0 and roughly 0.3, there appears to be missing data, however what really occurred was when creating data values, I performed both square root functions on values beginning from 0 and ending at 10, incrementing by 0.1 each time. So in reality, the smallest the root could have been (other than 0) was $\sqrt{0.1}$. Overall, Newton's Method is extremely well equipped at approximating square roots.
+
+\section{Conclusion}
+\normalsize
+
+From this assingnment, I learned that the computations performed by a computer ultimately come down to the basic four operators: addition, subtraction, multiplication, and division. With these in hand, can one develop mathematical series that can approximate values such as \textit{e} and $\pi$, for example. While there are numerous approaches to estimating these numbers, there exists pros and cons to each approach that must be considered before applying them. Precision and efficiency are effectively the two factors one must think of before utilizing these formulas, as it proves essential in improving your program's performance and reducing the amount of computational power required.
+
+
+\section{Credits}
+\normalsize
+\begin{itemize}
+\item The method and approach used to approximate the square root of a given value was provided by Professor Long. In the final program, this is found solely in the sqrt\textunderscore newton() function.
+
+\end{itemize}
+
+\end{document}
